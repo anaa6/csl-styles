@@ -3,6 +3,7 @@
   <info>
     <title>Harvard Bahasa Indonesia</title>
     <id>http://www.zotero.org/styles/harvard-bahasa-indonesia</id>
+    <link href="http://www.zotero.org/styles/harvard-bahasa-indonesia" rel="self"/>
     <link href="http://www.zotero.org/styles/harvard-cite-them-right" rel="template"/>
     <author>
       <name>OpenAI (dimodifikasi untuk Bahasa Indonesia)</name>
@@ -26,14 +27,13 @@
       <term name="in">dalam</term>
       <term name="page" form="short">pp.</term>
       <term name="volume">vol.</term>
-      <term name="and">dan</term> <!-- Ini yang penting untuk mengganti "and" menjadi "dan" -->
+      <term name="and">dan</term>
     </terms>
   </locale>
 
   <macro name="author">
     <names variable="author" and="text" delimiter=", " delimiter-precedes-last="always">
       <name initialize-with="." name-as-sort-order="all"/>
-      <label form="short" prefix=" (" suffix=")"/>
       <et-al font-style="italic"/>
       <substitute>
         <names variable="editor" and="text" delimiter=", ">
@@ -70,9 +70,6 @@
       <if type="book thesis report" match="any">
         <text variable="title" font-style="italic"/>
       </if>
-      <else-if type="chapter paper-conference">
-        <text variable="title" quotes="true"/>
-      </else-if>
       <else>
         <text variable="title" quotes="true"/>
       </else>
@@ -80,14 +77,22 @@
   </macro>
 
   <macro name="container-title">
-    <text variable="container-title" font-style="italic"/>
+    <choose>
+      <if variable="container-title">
+        <text variable="container-title" font-style="italic"/>
+      </if>
+    </choose>
   </macro>
 
   <macro name="editor">
-    <names variable="editor" and="text" delimiter=", ">
-      <name initialize-with=". "/>
-      <label form="short" prefix=" (" suffix=")"/>
-    </names>
+    <choose>
+      <if variable="editor">
+        <names variable="editor" and="text" delimiter=", ">
+          <name initialize-with=". "/>
+          <label form="short" prefix=" (" suffix=")"/>
+        </names>
+      </if>
+    </choose>
   </macro>
 
   <macro name="year-date">
@@ -97,17 +102,25 @@
   </macro>
 
   <macro name="publisher">
-    <group delimiter=". ">
-      <text variable="publisher"/>
-      <text variable="publisher-place"/>
-    </group>
+    <choose>
+      <if variable="publisher">
+        <group delimiter=". ">
+          <text variable="publisher"/>
+          <text variable="publisher-place"/>
+        </group>
+      </if>
+    </choose>
   </macro>
 
   <macro name="pages">
-    <group>
-      <text term="page" form="short" suffix=" "/>
-      <text variable="page"/>
-    </group>
+    <choose>
+      <if variable="page">
+        <group>
+          <text term="page" form="short" suffix=" "/>
+          <text variable="page"/>
+        </group>
+      </if>
+    </choose>
   </macro>
 
   <macro name="edition">
@@ -118,9 +131,9 @@
           <text term="edition" form="short"/>
         </group>
       </if>
-      <else>
+      <else-if variable="edition">
         <text variable="edition"/>
-      </else>
+      </else-if>
     </choose>
   </macro>
 
@@ -146,7 +159,7 @@
     <layout suffix=".">
       <group delimiter=". ">
         <text macro="author"/>
-        <text macro="year-date" prefix="" suffix=""/>
+        <text macro="year-date"/>
         <text macro="title"/>
         <text macro="edition"/>
         <text macro="editor"/>
